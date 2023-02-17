@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const Sauce = require('./models/sauce');
+const sauceRoutes = require('../routes/sauceRoutes');
+const userRoutes = require('../routes/userRoutes');
 
 mongoose.connect('mongodb+srv://piiquante_user:1234567890@cluster0.lmvc6uc.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -21,26 +22,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.post('/api/sauces', (req, res, next) => {
-  delete req.body._id;
-  const sauce = new Sauce({
-    ...req.body
-  });
-  sauce.save()
-    .then(() => res.status(201).json({message: 'Sauce enregistrée'}))
-    .catch(error => res.status(400).json({error}));
-});
-
-app.get('/api/sauces/:id', (req, res, next) => {
-    Sauce.findOne()
-      .then(sauces => res.status(200).json(sauces))
-      .catch(error => res.status(404).json({error}));
-});
-
-app.get('/api/sauces', (req, res, next) => {
-    Sauce.find()
-      .then(sauces => res.status(200).json(sauces))
-      .catch(error => res.status(400).json({error}));
-});
+app.use('/api/sauceRoutes', sauceRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
