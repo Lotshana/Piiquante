@@ -100,7 +100,7 @@ exports.likeOrDislikeSauce = (req, res, next) => {
         .then(sauces => res.status(200).json({message: 'Le like a bien été retiré'}))
         .catch(error => res.status(400).json({error}));
       }
-      if (sauce.usersDisliked.includes(req.body.userId)) {
+      else if (sauce.usersDisliked.includes(req.body.userId)) {
         Sauce.updateOne(
           {_id: req.params.id},
           {
